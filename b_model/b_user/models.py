@@ -19,6 +19,13 @@ CATEGORY_CHOICES = (
     (4, 'accesary')
 )
 
+class Shop(models.Model):
+    name = models.CharField(max_length = 128)
+
+    def __self__(self):
+        return self.name
+
+
 class User(AbstractUser):
     GENDER_CHOICES = (
         (0, "Male"),
@@ -30,13 +37,6 @@ class User(AbstractUser):
     )
 # AbstractUser를 참조해 만든 커스텀 유저모델, 성별과 즐겨찾는 브랜드를 추가했다.
 # 즐겨찾는 브랜드의 경우 다대다 관계를 이용해 만들었다.
-
-
-class Shop(models.Model):
-    name = models.CharField(max_length = 128)
-
-    def __self__(self):
-        return self.name
 
 
 class Product(models.Model):
