@@ -28,6 +28,9 @@ class User(AbstractUser):
     subscribed_brand = models.ManyToManyField(
         Shop,
     )
+# AbstractUser를 참조해 만든 커스텀 유저모델, 성별과 즐겨찾는 브랜드를 추가했다.
+# 즐겨찾는 브랜드의 경우 다대다 관계를 이용해 만들었다.
+
 
 class Shop(models.Model):
     name = models.CharField(max_length = 128)
@@ -48,6 +51,7 @@ class Product(models.Model):
     
     def __self__(self):
         return self.name
+# 상품 클래스, 브랜드는 ManytoOne 관계로 한 브랜드에서 여러 개의 상품을 등록할 수 있게 설계했다.
 
 
 class Order(models.Model):
@@ -59,3 +63,5 @@ class Order(models.Model):
         Product,
         on_delete = models.CASCADE
     )
+    quantity = models.IntegerField("수량", default=1) 
+    order_data = models.DateTimeField(auto_now_add = True)
