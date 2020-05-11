@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
@@ -17,6 +18,16 @@ CATEGORY_CHOICES = (
     (3, 'top'),
     (4, 'accesary')
 )
+
+class User(AbstractUser):
+    GENDER_CHOICES = (
+        (0, "Male"),
+        (1, "Female")
+    )
+    gender = models.IntegerField("성별", choices = GENDER_CHOICES)
+    subscribed_brand = models.ManyToManyField(
+        Shop,
+    )
 
 class Shop(models.Model):
     name = models.CharField(max_length = 128)
@@ -40,3 +51,11 @@ class Product(models.Model):
 
 
 class Order(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete = models.CASCADE,
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete = models.CASCADE
+    )
