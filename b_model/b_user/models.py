@@ -1,5 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+# 기본 유저 모델 사용
 
 # Create your models here.
 
@@ -26,17 +29,28 @@ class Shop(models.Model):
         return self.name
 
 
-class User(AbstractUser):
+class Profile(models.Model):
     GENDER_CHOICES = (
         (0, "Male"),
         (1, "Female")
     )
-    gender = models.IntegerField("성별", choices = GENDER_CHOICES)
+    user = models.OneToOneField(
+        User,
+        on_delete = models.CASCADE
+    )
+    gender = models.IntegerField("성별", choices=GENDER_CHOICES)
     subscribed_brand = models.ManyToManyField(
         Shop,
     )
-# AbstractUser를 참조해 만든 커스텀 유저모델, 성별과 즐겨찾는 브랜드를 추가했다.
-# 즐겨찾는 브랜드의 경우 다대다 관계를 이용해 만들었다.
+
+# @receiver(post_save, sender = User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#         if created:
+#             Profile.objects.created(user = instance)
+
+# @receiver(post_save, sender = User)
+# def save_user_profile(sender, instance, **kwargs):
+#     instance.profile.save()    
 
 
 class Product(models.Model):
@@ -55,12 +69,12 @@ class Product(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE,
-    )
     product = models.ForeignKey(
         Product,
+        on_delete = models.CASCADE
+    )
+    user = models.ForeignKey(
+        User,
         on_delete = models.CASCADE
     )
     quantity = models.IntegerField("수량", default=1) 
