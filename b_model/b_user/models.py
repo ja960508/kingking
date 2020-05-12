@@ -41,6 +41,7 @@ class Profile(models.Model):
     gender = models.IntegerField("성별", choices=GENDER_CHOICES)
     subscribed_brand = models.ManyToManyField(
         Shop,
+        blank = True
     )
 
 # @receiver(post_save, sender = User)
