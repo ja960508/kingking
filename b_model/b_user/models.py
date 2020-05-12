@@ -34,9 +34,9 @@ class Profile(models.Model):
         (0, "Male"),
         (1, "Female")
     )
-    user = models.OneToOneField(
+    users = models.OneToOneField(
         User,
-        on_delete = models.CASCADE
+        on_delete = models.CASCADE,
     )
     gender = models.IntegerField("성별", choices=GENDER_CHOICES)
     subscribed_brand = models.ManyToManyField(
@@ -73,9 +73,11 @@ class Order(models.Model):
         Product,
         on_delete = models.CASCADE
     )
-    user = models.ForeignKey(
-        User,
-        on_delete = models.CASCADE
+    profile = models.ForeignKey(
+        Profile,
+        on_delete = models.CASCADE,
+        null = True
     )
+    # 마이그레이션 할 때 warning을 없애기 위해 null = True로 설정
     quantity = models.IntegerField("수량", default=1) 
     order_data = models.DateTimeField(auto_now_add = True)
