@@ -49,6 +49,23 @@
 
 고객과 프로필의 관계는 일대일이다. 하나의 고객과 하나의 프로필이 서로 매칭되는 형태이다. 장고에서 기본으로 제공하는 유저 모델에 프로필 클래스를 일대일 관계로 추가해 기본 유저모델을 확장시켰다. 프로필은 고객의 성별, 즐겨찾는 브랜드 등 추가적인 요소를 나타낼 수 있다.
 
+    class Profile(models.Model):
+        GENDER_CHOICES = (
+            (0, "Male"),
+            (1, "Female")
+        )
+        users = models.OneToOneField(
+            User,
+            on_delete = models.CASCADE,
+        )
+        gender = models.IntegerField("성별", choices=GENDER_CHOICES)
+        subscribed_brand = models.ManyToManyField(
+            Shop,
+            blank = True
+        )
+
+즐겨찾기 브랜드는 없을 수도 있기 때문에 blank를 허용했다.
+
 상품과 판매자는 다대일 관계로 설계했다. 하나의 판매자는 여러 상품을 올릴 수 있기 때문에 이 경우 다대일 관계를 쓰는 것이 적절할 것 같다.
 
 주문(Order)은 판매자와 상품을 다대일 관계로 설정했다.
